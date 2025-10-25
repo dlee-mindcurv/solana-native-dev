@@ -15,7 +15,3 @@ fn process_instruction(
     Ok(())
 }
 
-#[cfg(test)]
-mod tests;
-
-
