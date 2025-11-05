@@ -3,8 +3,8 @@
   "name": "hello-solana",
   "scripts": {
     "test": "jest",
-    "build-and-test": "cargo build-sbf --manifest-path=./program/Cargo.toml --sbf-out-dir=./tests/fixtures && pnpm test",
-    "build": "cargo build-sbf --manifest-path=./program/Cargo.toml --sbf-out-dir=./program/target/deploy",
+    "build-and-test": "/Users/david.g.lee/.cache/solana/v1.51/platform-tools/rust/bin/cargo build-sbf --manifest-path=./program/Cargo.toml --sbf-out-dir=./tests/fixtures && pnpm test",
+    "build": "/Users/david.g.lee/.cache/solana/v1.51/platform-tools/rust/bin/cargo build-sbf --manifest-path=./program/Cargo.toml --sbf-out-dir=./program/target/deploy",
     "deploy": "solana program deploy ./program/target/deploy/hello_solana.so"
   }
 }
