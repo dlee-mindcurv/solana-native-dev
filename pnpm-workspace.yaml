@@ -1,3 +1,4 @@
 packages:
   - 'account-data'
   - 'hello-solana'
+  - 'global-state-counter'
