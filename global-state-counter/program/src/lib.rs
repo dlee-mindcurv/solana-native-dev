@@ -13,6 +13,8 @@ pub fn process_instruction(
     accounts: &[AccountInfo],
     program_data: &[u8],
 ) -> ProgramResult {
+    msg!("program_data {:?}", program_data);
+
     let (instruction_discriminant, instruction_data_inner) = program_data.split_at(1);
     match instruction_discriminant[0] {
         0 => {

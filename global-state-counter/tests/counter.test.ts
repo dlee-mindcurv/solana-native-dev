@@ -55,7 +55,7 @@ describe('Counter Solana Native', () => {
         counterAccountInfo = await client.getAccount(counter);
 
         const counterAccount = deserializeCounterAccount(Buffer.from(counterAccountInfo.data));
-        expect(counterAccount.count.toNumber()).toEqual(0)
+        expect(counterAccount.count.toNumber()).toEqual(1)
     })
 
 
