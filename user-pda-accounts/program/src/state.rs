@@ -4,5 +4,10 @@ use borsh::{BorshDeserialize, BorshSerialize};
 pub struct Favorites {
     pub number: u64,
     pub color: String,
-    pub hobbbies: Vec<String>,
+    pub hobbies: Vec<String>,
+}
+
+#[derive(BorshSerialize, BorshDeserialize, Debug)]
+pub struct Favorites2 {
+    pub number: u64,
 }
