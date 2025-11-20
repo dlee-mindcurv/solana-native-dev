@@ -25,7 +25,7 @@ type Fav = {
     hobbies: Array<string>
 }
 
-describe("Testing user-pda-accounts", () => {
+describe("Testing checking-instruction-acconts", () => {
 
     const programId = PublicKey.unique();
 
