@@ -2,4 +2,4 @@ packages:
   - 'account-data'
   - 'hello-solana'
   - 'global-state-counter'
-  - 'user-pda-accounts'
+  - 'checking-instruction-accounts'

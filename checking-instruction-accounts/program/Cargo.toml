@@ -1,0 +1,28 @@
+[package]
+name = "checking-instruction-accounts"
+version = "0.1.0"
+edition = "2021"
+
+[lib]
+crate-type = ["cdylib", "lib"]
+
+[dependencies]
+borsh = "1.5.7"
+solana-program = "2.1.0"
+solana-system-interface = { version = "1.0.0", features = ["bincode"] }
+
+[lints.rust]
+unexpected_cfgs = { level = "warn", check-cfg = ['cfg(target_os, values("solana"))'] }
+
+[dev-dependencies]
+litesvm = "0.8.1"
+solana-keypair = "3.0.1"
+solana-native-token = "3.0.0"
+solana-pubkey = "3.0.0"
+solana-sdk = "3.0.0"
+solana-transaction = "3.0.1"
+
+
+[features]
+custom-heap = []
+custom-panic = []
