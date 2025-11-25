@@ -161,6 +161,7 @@ name = "close-account"
 version = "0.1.0"
 dependencies = [
  "base64ct",
+ "borsh",
  "solana-program",
 ]
 
