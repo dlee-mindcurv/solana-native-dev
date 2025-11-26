@@ -1,10 +1,12 @@
+use borsh::{BorshDeserialize, BorshSerialize};
+
 pub enum User {
-    createPda(UserInfo),
-    sayHello(UserInfo),
+    CreatePda(UserInfo),
+    SayHello(UserInfo),
 }
 
-#[derive(Debug)]
+#[derive(Debug, BorshDeserialize, BorshSerialize)]
 pub struct UserInfo {
-    name: String,
-    age: u8,
+    pub name: String,
+    pub age: u8,
 }

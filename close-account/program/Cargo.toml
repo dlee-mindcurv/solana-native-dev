@@ -8,6 +8,10 @@ solana-program = "3.0.0"
 base64ct = "=1.6.0"
 borsh = "1.5.7"
 
+[dev-dependencies]
+litesvm = "0.8.2"
+solana-sdk = "3.0.0"
+
 
 [lib]
 crate-type = ["cdylib", "lib"]
