@@ -1,27 +1,31 @@
 pub mod instruction;
 pub mod state;
 
-use solana_program::account_info::{next_account_info, AccountInfo};
+use crate::instruction::{close_user, create_user};
+use crate::state::User;
+use borsh::BorshDeserialize;
+use solana_program::account_info::AccountInfo;
+use solana_program::entrypoint;
 use solana_program::entrypoint::ProgramResult;
 use solana_program::pubkey::Pubkey;
-use solana_program::{entrypoint, msg};
 
 entrypoint!(process_program);
 
 pub fn process_program(
-    _program_id: &Pubkey,
+    program_id: &Pubkey,
     accounts: &[AccountInfo],
-    _data: &[u8],
+    data: &[u8],
 ) -> ProgramResult {
-    let accounts_iter = &mut accounts.iter();
+    let deserialized_data = User::try_from_slice(data)?;
 
-    let payer = next_account_info(accounts_iter)?;
-    let pda_account = next_account_info(accounts_iter)?;
-    let system_program = next_account_info(accounts_iter)?;
+    let res = match deserialized_data {
+        User::CreateUser(create_user_args) => {
+            // we pass the deserialized user info because the original data passed in contains the
+            // discriminator
+            create_user(program_id, accounts, create_user_args)
+        }
+        User::CloseUser => close_user(program_id, accounts),
+    };
 
-    msg!("{:?}", payer.key);
-    // msg!("{:?}", pda_account.key);
-    // msg!("{:?}", system_program.key);
-
-    Ok(())
+    res
 }

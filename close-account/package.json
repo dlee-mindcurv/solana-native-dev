@@ -1,7 +1,8 @@
 {
   "name": "checking-instruction-accounts",
   "scripts": {
-    "test": "cd program && RUST_BACKTRACE=1 cargo test-sbf -- --no-capture",
+    "test": "jest",
+    "test:rs": "cd program && RUST_BACKTRACE=full cargo test-sbf -- --no-capture",
     "build-and-test": "cargo build-sbf --manifest-path=./program/Cargo.toml --sbf-out-dir=./program/target/deploy && cargo build-sbf --manifest-path=./program/Cargo.toml --sbf-out-dir=./tests/fixtures && pnpm test",
     "build": "cargo build-sbf --manifest-path=./program/Cargo.toml --sbf-out-dir=./program/target/deploy",
     "deploy": "solana program deploy ./program/target/deploy/account_data.so",

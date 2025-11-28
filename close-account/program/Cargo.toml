@@ -5,12 +5,14 @@ edition = "2021"
 
 [dependencies]
 solana-program = "3.0.0"
+solana-system-interface = { version = "2.0.0", features = ["bincode"] }
 base64ct = "=1.6.0"
 borsh = "1.5.7"
 
 [dev-dependencies]
 litesvm = "0.8.2"
 solana-sdk = "3.0.0"
+solana-keypair = "3.0.1"
 
 
 [lib]
