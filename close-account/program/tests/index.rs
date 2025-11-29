@@ -1,12 +1,11 @@
 use borsh::to_vec;
 use close_account::state::{CreateUserArgs, UserInfo};
 use litesvm::LiteSVM;
-use solana_keypair::{Keypair, Signer};
 use solana_sdk::message::{AccountMeta, Instruction};
 use solana_sdk::native_token::LAMPORTS_PER_SOL;
 use solana_sdk::pubkey::Pubkey;
 use solana_sdk::transaction::Transaction;
-
+use solana_sdk::signer::{keypair::{Signer, Keypair}};
 #[test]
 pub fn test_close_option() -> Result<(), Box<dyn std::error::Error>> {
     let svm = &mut LiteSVM::new();

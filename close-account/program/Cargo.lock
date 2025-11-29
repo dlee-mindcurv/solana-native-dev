@@ -473,7 +473,6 @@ dependencies = [
  "base64ct",
  "borsh",
  "litesvm",
- "solana-keypair",
  "solana-program",
  "solana-sdk",
  "solana-system-interface",
