@@ -3,3 +3,4 @@ packages:
   - 'hello-solana'
   - 'global-state-counter'
   - 'checking-instruction-accounts'
+  - 'close-account'
