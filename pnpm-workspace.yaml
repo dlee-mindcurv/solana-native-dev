@@ -4,3 +4,4 @@ packages:
   - 'global-state-counter'
   - 'checking-instruction-accounts'
   - 'close-account'
+  - 'create-account'

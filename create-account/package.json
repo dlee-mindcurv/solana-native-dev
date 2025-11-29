@@ -1,5 +1,5 @@
 {
-  "name": "close-account",
+  "name": "create-account",
   "scripts": {
     "test": "jest",
     "test:rs": "cd program && RUST_BACKTRACE=full cargo test-sbf -- --no-capture",
