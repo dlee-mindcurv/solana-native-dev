@@ -25,7 +25,7 @@ pub fn test_create_account() {
     let ix  = Instruction::new_with_bytes(program_id, &[0], vec![
         AccountMeta::new(payer.pubkey(), true),
         AccountMeta::new(new_account.pubkey(), true),
-        AccountMeta::new(solana_system_interface::program::ID, false),
+        AccountMeta::new_readonly(solana_system_interface::program::ID, false),
     ]);
 
     let tx = Transaction::new_signed_with_payer(&[ix], Some(&payer.pubkey()), &[
