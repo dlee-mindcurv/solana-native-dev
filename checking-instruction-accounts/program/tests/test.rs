@@ -55,7 +55,7 @@ pub fn test_entry() {
     //         AccountMeta::new(payer.pubkey(), true),
     //         AccountMeta::new(account_to_create.pubkey(), true),
     //         AccountMeta::new(account_to_change.pubkey(), true),
-    //         AccountMeta::new(solana_system_interface::program::ID, false),
+    //         AccountMeta::new(solana_system_interface::programs::ID, false),
     //     ],
     //     data: instruction_data,
     // };
@@ -69,6 +69,6 @@ pub fn test_entry() {
     //
     // assert!(
     //     svm.send_transaction(tx).is_ok(),
-    //     "transaction with program failed"
+    //     "transaction with programs failed"
     // )
 }
