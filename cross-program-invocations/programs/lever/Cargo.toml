@@ -8,19 +8,14 @@ no-entrypoint = []
 cpi = ["no-entrypoint"]
 custom-heap = []
 dustom-panic = []
+david = []
 
 
 [dependencies]
 borsh = "1.6.0"
-borsh-derive = "1.6.0"
 solana-program = "3.0.0"
 base64ct = "=1.6.0"
 solana-system-interface = { version = "2.0.0", features = ["bincode"] }
-
-
-[dev-dependencies]
-solana-sdk = "3.0.0"
-litesvm = "0.8.2"
 
 [lib]
 crate-type = ["cdylib", "lib"]

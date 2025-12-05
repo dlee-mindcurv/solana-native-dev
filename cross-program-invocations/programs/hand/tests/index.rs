@@ -1,7 +1,5 @@
-use borsh::to_vec;
 use borsh::BorshDeserialize;
-use borsh::BorshSerialize;
-// use lever::PowerStatus;
+use borsh::{from_slice, to_vec};
 use lever::{PowerStatus, SetPowerStatus};
 use litesvm::LiteSVM;
 use solana_sdk::message::{AccountMeta, Instruction};
@@ -15,7 +13,8 @@ pub fn test_hand() {
     // define payer for the transaction
     let payer = Keypair::new();
 
-    // define account to instruct the hand to use the lever
+    // define account hold data for the lever program
+    // This will be used to update the change in the SetPowerStatus test
     let power_account = Keypair::new();
 
     // define the test hand programId for the svm test
@@ -54,11 +53,12 @@ pub fn test_hand() {
         data: to_vec(&power_status_data).unwrap(),
     };
 
-    // create the transaction
+    // 1. INITIALZE THE LEVER PROGRAM with a value
+    // because we are not using PDA for this we need to send signed tx with both payer and new account
     let tx = Transaction::new_signed_with_payer(
         &[initiate_ix],
         Some(&payer.pubkey()),
-        &[payer, power_account],
+        &[&payer, &power_account],
         svm.latest_blockhash(),
     );
 
@@ -69,4 +69,79 @@ pub fn test_hand() {
     }
 
     svm.send_transaction(tx.clone()).unwrap();
+
+    // check value at adderess
+    let account_data_is_on = from_slice::<PowerStatus>(
+        svm.get_account(&power_account.pubkey())
+            .unwrap()
+            .data
+            .as_ref(),
+    )
+    .unwrap()
+    .is_on;
+
+    assert!(account_data_is_on);
+
+    // 2. Change the staus of the LEVER through the use of the "Hand"
+
+    // create the instruction
+    let hand_ix = Instruction {
+        program_id: program_id_hand,
+        accounts: vec![
+            AccountMeta::new(power_account.pubkey(), false),
+            AccountMeta::new(program_id_lever, false),
+        ],
+        data: to_vec(&SetPowerStatus {
+            name: "David Lee".to_string(),
+        })
+        .unwrap(),
+    };
+
+    let hand_ix2 = Instruction {
+        program_id: program_id_hand,
+        accounts: vec![
+            AccountMeta::new(power_account.pubkey(), false),
+            AccountMeta::new(program_id_lever, false),
+        ],
+        data: to_vec(&SetPowerStatus {
+            name: "Christine Lee".to_string(),
+        })
+        .unwrap(),
+    };
+    let hand_ix3 = Instruction {
+        program_id: program_id_hand,
+        accounts: vec![
+            AccountMeta::new(power_account.pubkey(), false),
+            AccountMeta::new(program_id_lever, false),
+        ],
+        data: to_vec(&SetPowerStatus {
+            name: "Marty Lee".to_string(),
+        })
+        .unwrap(),
+    };
+
+    let tx_hand = Transaction::new_signed_with_payer(
+        &[hand_ix, hand_ix2, hand_ix3],
+        Some(&payer.pubkey()),
+        &[&payer],
+        svm.latest_blockhash(),
+    );
+
+    let meta = svm.simulate_transaction(tx_hand.clone()).unwrap().meta;
+
+    for log in meta.logs {
+        println!("{:?}", log)
+    }
+
+    svm.send_transaction(tx_hand.clone()).unwrap();
+
+    let is_power_on = PowerStatus::try_from_slice(
+        svm.get_account(&power_account.pubkey())
+            .unwrap()
+            .data
+            .as_ref(),
+    )
+    .unwrap();
+
+    assert_eq!(is_power_on.is_on, false)
 }

@@ -4,8 +4,8 @@ use solana_program::account_info::{next_account_info, AccountInfo};
 
 #[cfg(not(feature = "no-entrypoint"))]
 use solana_program::entrypoint;
+
 use solana_program::entrypoint::ProgramResult;
-use solana_program::instruction::{AccountMeta, Instruction};
 use solana_program::msg;
 use solana_program::program::invoke;
 use solana_program::pubkey::Pubkey;
@@ -37,22 +37,9 @@ pub fn process_instruction(
     }
 
     if let Ok(set_power_status) = SetPowerStatus::try_from_slice(data) {
-        msg!("LEVER::Set Power status: {:?}", set_power_status);
-        // return initialize(program_id, accounts, set_power_status);
+        msg!("LEVER PULL::Set Power status: {:?}", set_power_status);
+        return switch_power(accounts, set_power_status.name);
     }
-
-    // Err(ProgramError::InvalidInstructionData)
-
-    // msg!("LEVER PROGRAM: {:?}", status);
-    //
-    // match status {
-    //     Ok(lever_status) => {
-    //         msg!("lever_status {:?}", lever_status)
-    //     }
-    //     Err(error) => {
-    //         msg!("Error {:?}", error)
-    //     }
-    // }
 
     Ok(())
 }
@@ -82,6 +69,28 @@ pub fn initialize(
     invoke(&ix, &[payer.clone(), power.clone(), system_program.clone()]);
 
     power_status.serialize(&mut &mut power.data.borrow_mut()[..])?;
+
+    Ok(())
+}
+
+pub fn switch_power(accounts: &[AccountInfo], name: String) -> ProgramResult {
+    let accounts_iter = &mut accounts.iter();
+
+    // access the AccountIn for the power account
+    let power_account = next_account_info(accounts_iter)?;
+
+    let mut power_status = PowerStatus::try_from_slice(&power_account.data.borrow())?;
+
+    // toggle the value
+    power_status.is_on = !power_status.is_on;
+    power_status.serialize(&mut &mut power_account.data.borrow_mut()[..])?;
+
+    msg!("{} is pulling the power switch", name);
+
+    match power_status.is_on {
+        true => msg!("The power is on"),
+        false => msg!("The power is off"),
+    }
 
     Ok(())
 }

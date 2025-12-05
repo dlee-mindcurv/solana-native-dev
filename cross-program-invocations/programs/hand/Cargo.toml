@@ -5,17 +5,19 @@ edition = "2021"
 
 [features]
 no-entrypoint = []
-cpi = ["no-entrypoint"]
 custom-heap = []
 custom-panic = []
+david = []
 
 [dependencies]
 borsh = "1.6.0"
-borsh-derive = "1.6.0"
 solana-program = "3.0.0"
 base64ct = "=1.6.0"
-lever = { path = "../lever", features = ["cpi"] }
 solana-system-interface = "2.0.0"
+
+# assign a feature to this module
+lever = { path = "../lever", features = ["cpi", "david"] }
+
 
 
 [dev-dependencies]

@@ -895,7 +895,6 @@ version = "0.1.0"
 dependencies = [
  "base64ct",
  "borsh",
- "borsh-derive",
  "lever",
  "litesvm",
  "solana-program",
@@ -1039,10 +1038,7 @@ version = "0.1.0"
 dependencies = [
  "base64ct",
  "borsh",
- "borsh-derive",
- "litesvm",
  "solana-program",
- "solana-sdk",
  "solana-system-interface",
 ]
 
