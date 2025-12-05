@@ -5,3 +5,4 @@ packages:
   - 'checking-instruction-accounts'
   - 'close-account'
   - 'create-account'
+  - 'cross-program-invocations'

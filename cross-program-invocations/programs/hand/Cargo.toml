@@ -1,0 +1,33 @@
+[package]
+name = "hand"
+version = "0.1.0"
+edition = "2021"
+
+[features]
+no-entrypoint = []
+custom-heap = []
+custom-panic = []
+david = []
+
+[dependencies]
+borsh = "1.6.0"
+solana-program = "3.0.0"
+base64ct = "=1.6.0"
+solana-system-interface = "2.0.0"
+
+# assign a feature to this module
+lever = { path = "../lever", features = ["cpi", "david"] }
+
+
+
+[dev-dependencies]
+litesvm = "0.8.2"
+solana-sdk = "3.0.0"
+
+[lib]
+crate-type = ["cdylib", "lib"]
+
+[lints.rust]
+unexpected_cfgs = { level = "warn", check-cfg = ['cfg(target_os, values("solana"))'] }
+
+

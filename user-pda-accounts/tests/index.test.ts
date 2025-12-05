@@ -84,7 +84,7 @@ describe("Testing checking-instruction-acconts", () => {
 
     it("Check if the test fails if the pda seeds aren't same", async () => {
         // Although the programId is the same, the difference here is the payer.... because the pda address is derived
-        // from programId and the payer's publicKey, the program should reject this
+        // from programId and the payer's publicKey, the programs should reject this
         const favoritePda = PublicKey.findProgramAddressSync([
             // SEED HERE IS DIFFERENT
             Buffer.from("favorites"), payer.publicKey.toBuffer()

@@ -1,0 +1,25 @@
+[package]
+name = "lever"
+version = "0.1.0"
+edition = "2021"
+
+[features]
+no-entrypoint = []
+cpi = ["no-entrypoint"]
+custom-heap = []
+dustom-panic = []
+david = []
+
+
+[dependencies]
+borsh = "1.6.0"
+solana-program = "3.0.0"
+base64ct = "=1.6.0"
+solana-system-interface = { version = "2.0.0", features = ["bincode"] }
+
+[lib]
+crate-type = ["cdylib", "lib"]
+
+[lints.rust]
+unexpected_cfgs = { level = "warn", check-cfg = ['cfg(target_os, values("solana"))'] }
+

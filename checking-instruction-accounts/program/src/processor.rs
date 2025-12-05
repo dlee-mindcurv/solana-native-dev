@@ -14,8 +14,8 @@ pub fn process_program(
     accounts: &[AccountInfo],
     data: &[u8],
 ) -> ProgramResult {
-    // Verify that the program ID from the instruction is in fact
-    // the program ID of your program
+    // Verify that the programs ID from the instruction is in fact
+    // the programs ID of your programs
     if solana_system_interface::program::check_id(program_id) {
         msg!("ERROR");
         return Err(ProgramError::IncorrectProgramId);
@@ -77,13 +77,13 @@ pub fn process_program(
         return Err(ProgramError::UninitializedAccount);
     }
 
-    // if we want to modify an account, we need to ensure that it is owned by the program
+    // if we want to modify an account, we need to ensure that it is owned by the programs
     if account_to_change.owner != program_id {
-        msg!("Attempting to change account data by account not assigned to program");
+        msg!("Attempting to change account data by account not assigned to programs");
         return Err(ProgramError::IncorrectProgramId);
     }
 
-    // ensure that the system program id matches the native system program
+    // ensure that the system programs id matches the native system programs
     if system_program.key == &system_program::ID {
         msg!("YES")
     }

@@ -21,7 +21,7 @@ describe('Counter Solana Native', () => {
         const counterKeypair = Keypair.generate();
         const counter = counterKeypair.publicKey;
 
-        //  Create an Instruction to interact with our counter program
+        //  Create an Instruction to interact with our counter programs
         const alloxIx: TransactionInstruction = SystemProgram.createAccount({
             fromPubkey: payer.publicKey,
             newAccountPubkey: counter,
@@ -30,7 +30,7 @@ describe('Counter Solana Native', () => {
             programId: PROGRAM_ID
         })
 
-        // Create an Instruction to interact with the counter program
+        // Create an Instruction to interact with the counter programs
         const incrementIx: TransactionInstruction = createIncrementInstruction({counter});
         // const tx = new Transaction().add(alloxIx);
         const tx = new Transaction().add(alloxIx).add(incrementIx);

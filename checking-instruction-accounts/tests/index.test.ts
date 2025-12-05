@@ -16,8 +16,8 @@ describe('check account instruction', () => {
     const accountToCreate = Keypair.generate()
     svm.airdrop(payer.publicKey, BigInt(LAMPORTS_PER_SOL));
 
-    it('creates an account for the program', async () => {
-        svm.addProgramFromFile(programId, "./program/target/deploy/checking_instruction_accounts.so")
+    it('creates an account for the programs', async () => {
+        svm.addProgramFromFile(programId, "./programs/target/deploy/checking_instruction_accounts.so")
 
         const initialAccountSpace = 0;
         const lamports = svm.minimumBalanceForRentExemption(BigInt(initialAccountSpace));
@@ -40,7 +40,7 @@ describe('check account instruction', () => {
         expect(accountFound.lamports).toEqual(890880);
     });
 
-    it('checks the accounts on the program id', () => {
+    it('checks the accounts on the programs id', () => {
 
         const ix = new TransactionInstruction({
             programId: programId,
