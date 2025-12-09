@@ -1,4 +1,4 @@
-use borsh::to_vec;
+use borsh::{from_slice, to_vec};
 use litesvm::LiteSVM;
 use program_derived_assets::state::page_visits::{PDACommands, PageVisits};
 use solana_instruction::{AccountMeta, Instruction};
@@ -27,10 +27,11 @@ pub fn test_process_instruction() {
 
     // find the pda_account for the program
     // this account will allow anyone to update the pda as there
-    let (pda_account, bump) = Pubkey::find_program_address(&[b"page_visits"], &program_id);
+    let (pda_account, bump) =
+        Pubkey::find_program_address(&[b"page_visits", &payer.pubkey().as_ref()], &program_id);
 
     let page_visit = PageVisits {
-        page_visits: 10,
+        page_visits: 0,
         bump,
     };
 
@@ -41,6 +42,7 @@ pub fn test_process_instruction() {
     let ix_create = Instruction {
         program_id,
         accounts: vec![
+            AccountMeta::new(payer.pubkey(), true),
             AccountMeta::new(payer.pubkey(), true),
             AccountMeta::new(pda_account, false),
             AccountMeta::new_readonly(solana_system_interface::program::ID, false),
@@ -55,15 +57,18 @@ pub fn test_process_instruction() {
         program_id,
         accounts: vec![
             AccountMeta::new(payer.pubkey(), true),
+            AccountMeta::new(payer.pubkey(), true),
             AccountMeta::new(pda_account, false),
             AccountMeta::new(solana_system_interface::program::ID, false),
         ],
         data: increment_command_data,
     };
 
+    let ix_increment2 = ix_increment.clone();
+
     // define the tx for the instructions
     let page_visit_instructions = Transaction::new_signed_with_payer(
-        &[ix_create, ix_increment],
+        &[ix_create, ix_increment, ix_increment2],
         Some(&payer.pubkey()),
         &[payer],
         svm.latest_blockhash(),
@@ -71,8 +76,17 @@ pub fn test_process_instruction() {
 
     // execute transactions
     let tx_res = svm.send_transaction(page_visit_instructions).unwrap();
-
     for log in tx_res.logs {
         println!("{:?}", log);
     }
+    // test that the account is created
+    let newly_created_pda = svm.get_account(&pda_account);
+    match newly_created_pda {
+        Some(acc) => {
+            assert!(true);
+            let page_visits = from_slice::<PageVisits>(acc.data.as_ref());
+            assert_eq!(page_visits.unwrap().page_visits, 2)
+        }
+        None => assert!(false, "Test failed, account not created."),
+    };
 }
