@@ -7,3 +7,4 @@ packages:
   - 'create-account'
   - 'cross-program-invocations'
   - 'custom-instruction-data'
+  - 'program-derived-assets'
