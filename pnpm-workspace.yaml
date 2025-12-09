@@ -6,3 +6,4 @@ packages:
   - 'close-account'
   - 'create-account'
   - 'cross-program-invocations'
+  - 'custom-instruction-data'
