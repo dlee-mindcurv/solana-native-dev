@@ -9,3 +9,4 @@ packages:
   - 'custom-instruction-data'
   - 'program-derived-assets'
   - 'accounts-that-expand-in-size'
+  - 'rent'
