@@ -8,3 +8,4 @@ packages:
   - 'cross-program-invocations'
   - 'custom-instruction-data'
   - 'program-derived-assets'
+  - 'accounts-that-expand-in-size'

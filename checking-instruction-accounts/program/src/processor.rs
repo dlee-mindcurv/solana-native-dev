@@ -16,7 +16,7 @@ pub fn process_program(
 ) -> ProgramResult {
     // Verify that the programs ID from the instruction is in fact
     // the programs ID of your programs
-    if solana_system_interface::program::check_id(program_id) {
+    if !solana_system_interface::program::check_id(program_id) {
         msg!("ERROR");
         return Err(ProgramError::IncorrectProgramId);
     }
