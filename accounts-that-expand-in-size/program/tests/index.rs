@@ -3,10 +3,12 @@ use accounts_that_expand_in_size::state::address_info::AddressInfo;
 use accounts_that_expand_in_size::state::enhanced_address_info::{
     EnhancedAddressInfo, EnhancedAddressInfoExtender,
 };
+use accounts_that_expand_in_size::state::work_info::WorkInfo;
 use borsh::{from_slice, to_vec};
 use litesvm::LiteSVM;
 use solana_instruction::{AccountMeta, Instruction};
 use solana_keypair::{Keypair, Signer};
+use solana_program::msg;
 use solana_program::native_token::LAMPORTS_PER_SOL;
 use solana_pubkey::Pubkey;
 use solana_transaction::Transaction;
@@ -69,7 +71,7 @@ pub fn test_accounts_that_expand_in_size() {
     let created_account = svm.get_account(&user.pubkey()).unwrap();
 
     let data = from_slice::<AddressInfo>(&created_account.data).unwrap();
-
+    msg!("Additional Pros {:?}", data);
     assert_eq!(data.city, "Toronto".to_string());
     assert_eq!(data.name, "Canada".to_string());
     assert_eq!(data.street, "123 Main St".to_string());
@@ -116,9 +118,56 @@ pub fn test_accounts_that_expand_in_size() {
 
     let data = from_slice::<EnhancedAddressInfo>(&updated_account.data).unwrap();
 
+    msg!("ENHANCED PROPS OVERWRITE (EnhancedAddressInfo) {:?}", data);
     assert_eq!(data.city, "Toronto".to_string());
     assert_eq!(data.name, "Canada".to_string());
     assert_eq!(data.street, "123 Main St".to_string());
     assert_eq!(data.state, "Ontario".to_string());
     assert_eq!(data.zip, 123456);
+
+    // test the resize with a "zero init" (which is not a tru zero init), rather a completely new object
+    let zero_init_data = WorkInfo {
+        name: "Pete".to_string(),
+        position: "CEO".to_string(),
+        company: "ABN AMRO".to_string(),
+        years_employed: 3,
+    };
+
+    // create the command that will trigger the associated instruction
+    let zero_init_command = ReallocInstruction::ReallocateZeroInit(zero_init_data);
+
+    // create the instruction to save a completely different struct to th accounts
+    let zero_init_ix = Instruction {
+        program_id,
+        accounts: vec![
+            AccountMeta::new(payer.pubkey(), true),
+            AccountMeta::new(user.pubkey(), true),
+            AccountMeta::new_readonly(solana_system_interface::program::ID, false),
+        ],
+        data: to_vec(&zero_init_command).unwrap(),
+    };
+
+    // define the transaction to send to the svm
+    let zero_init_tx = Transaction::new_signed_with_payer(
+        &[zero_init_ix],
+        Some(&payer.pubkey()),
+        &[&payer, &user],
+        svm.latest_blockhash(),
+    );
+
+    let zero_init_tx_result = svm.send_transaction(zero_init_tx).unwrap();
+    let updated_zero_account = svm.get_account(&user.pubkey()).unwrap();
+
+    let updated_zero_account_data = from_slice::<WorkInfo>(&updated_zero_account.data).unwrap();
+    println!(
+        "COMPLETELY NEW OBJECT OVERWRITE (WorkInfo) {:?}",
+        updated_zero_account_data
+    );
+
+    for log in zero_init_tx_result.logs {
+        println!("{:?}", log);
+    }
+
+    assert_eq!(updated_zero_account_data.company, "ABN AMRO".to_string());
+    assert_eq!(updated_zero_account_data.years_employed, 3);
 }

@@ -1,12 +1,11 @@
 use crate::instructions::create::create_address_info;
-use crate::instructions::reallocate::{reallocate_without_zero_init, reallocate_zero_init};
+use crate::instructions::reallocate::{reallocate_new_data_object, reallocate_with_original_data};
 use crate::state::address_info::AddressInfo;
 use crate::state::enhanced_address_info::EnhancedAddressInfoExtender;
 use crate::state::work_info::WorkInfo;
 use borsh::{BorshDeserialize, BorshSerialize};
 use solana_program::account_info::AccountInfo;
 use solana_program::entrypoint::ProgramResult;
-use solana_program::msg;
 use solana_program::pubkey::Pubkey;
 
 #[derive(Debug, BorshDeserialize, BorshSerialize)]
@@ -28,10 +27,10 @@ pub fn process_instruction(
             return create_address_info(program_id, accounts, address)
         }
         ReallocInstruction::ReallocateWithoutZeroInit(enhancedAddressInfo) => {
-            return reallocate_without_zero_init(program_id, accounts, enhancedAddressInfo)
+            return reallocate_with_original_data(program_id, accounts, enhancedAddressInfo)
         }
-        ReallocInstruction::ReallocateZeroInit(workInfo) => return reallocate_zero_init(),
+        ReallocInstruction::ReallocateZeroInit(work_info) => {
+            return reallocate_new_data_object(program_id, accounts, work_info)
+        }
     }
-
-    Ok(())
 }
