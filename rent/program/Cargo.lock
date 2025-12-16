@@ -1518,7 +1518,6 @@ dependencies = [
  "base64ct",
  "borsh",
  "litesvm",
- "serde",
  "solana-instruction",
  "solana-keypair",
  "solana-program",
