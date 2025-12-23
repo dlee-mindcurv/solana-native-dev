@@ -10,3 +10,4 @@ packages:
   - 'program-derived-assets'
   - 'accounts-that-expand-in-size'
   - 'rent'
+  - 'repository-layout-program'
