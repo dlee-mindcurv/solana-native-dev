@@ -1,5 +1,5 @@
 {
-  "name": "repository-layout-program",
+  "name": "transfer-sol",
   "scripts": {
     "test": "jest",
     "test:rs": "cd program && RUST_BACKTRACE=full cargo test-sbf -- --no-capture",
