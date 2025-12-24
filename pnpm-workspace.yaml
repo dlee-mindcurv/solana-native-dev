@@ -11,3 +11,4 @@ packages:
   - 'accounts-that-expand-in-size'
   - 'rent'
   - 'repository-layout-program'
+  - 'transfer-sol-program'
